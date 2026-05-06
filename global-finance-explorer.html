@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Finance Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+:root {
+  --bg: #f6f8fc;
+  --surface: #ffffff;
+  --surface-alt: #eaf1ff;
+  --text: #1d2740;
+  --muted: #5e6985;
+  --primary: #3e63dd;
+  --primary-dark: #2949b6;
+  --secondary: #13b39c;
+  --dark: #13213f;
+  --dark-card: #1c2b4d;
+  --border: #d9e1f2;
+  --shadow: 0 18px 40px rgba(20, 33, 63, 0.08);
+  --radius: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.hero {
+  padding: 5rem 1.5rem 4rem;
+  background:
+    radial-gradient(circle at top left, rgba(19, 179, 156, 0.22), transparent 30%),
+    radial-gradient(circle at top right, rgba(62, 99, 221, 0.28), transparent 35%),
+    linear-gradient(135deg, #081225, #13213f 55%, #1b2f59);
+  color: white;
+}
+
+.hero__content,
+.section,
+.footer {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.eyebrow,
+.section__tag,
+.simulator__label {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4.7rem);
+  line-height: 1.05;
+  max-width: 10ch;
+  margin-bottom: 0;
+}
+
+.hero__text {
+  max-width: 55ch;
+  font-size: 1.08rem;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.hero__actions,
+.quiz__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.85rem 1.3rem;
+  border-radius: 999px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button--primary {
+  background: var(--secondary);
+  color: #05261f;
+}
+
+.button--ghost {
+  background: transparent;
+  color: white;
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+main {
+  padding: 1.5rem;
+}
+
+.section {
+  padding: 1rem 0 2rem;
+}
+
+.section__heading {
+  margin-bottom: 1.5rem;
+  max-width: 65ch;
+}
+
+.section__heading h2 {
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  margin-bottom: 0.6rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.grid--4 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+}
+
+.card h3 {
+  margin-bottom: 0.55rem;
+}
+
+.card--accent {
+  border-top: 5px solid var(--primary);
+}
+
+.card--panel {
+  min-height: 140px;
+}
+
+.section--intro {
+  margin-top: -2rem;
+}
+
+.section--dark {
+  background: var(--dark);
+  color: white;
+  padding: 2rem;
+  border-radius: 28px;
+  margin: 2rem auto;
+}
+
+.section--dark .card {
+  background: var(--dark-card);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  box-shadow: none;
+}
+
+.section--soft {
+  background: linear-gradient(180deg, rgba(62, 99, 221, 0.08), rgba(19, 179, 156, 0.08));
+  padding: 2rem;
+  border-radius: 28px;
+  margin: 2rem auto;
+}
+
+.flowchart {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.flowchart__step {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  border-radius: 16px;
+  padding: 0.95rem;
+  cursor: pointer;
+}
+
+.flowchart__step.is-active {
+  background: var(--secondary);
+  color: #06261f;
+  border-color: transparent;
+  font-weight: 700;
+}
+
+.compare {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.checklist {
+  padding-left: 1.1rem;
+  margin-bottom: 0;
+}
+
+.glossary {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.glossary__item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.glossary__button {
+  width: 100%;
+  padding: 1rem 1.1rem;
+  border: 0;
+  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.glossary__content {
+  padding: 0 1.1rem 1rem;
+  color: var(--muted);
+  display: none;
+}
+
+.glossary__item.is-open .glossary__content {
+  display: block;
+}
+
+.simulator {
+  display: grid;
+  gap: 1rem;
+}
+
+.simulator input[type="range"] {
+  width: 100%;
+  accent-color: var(--primary);
+}
+
+.simulator__display {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.scenario-grid,
+.quiz {
+  display: grid;
+  gap: 1rem;
+}
+
+.scenario {
+  padding: 1.1rem;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.scenario__options {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.choice {
+  width: 100%;
+  text-align: left;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+}
+
+.choice.is-correct {
+  background: rgba(19, 179, 156, 0.22);
+  border-color: rgba(19, 179, 156, 0.7);
+}
+
+.choice.is-wrong {
+  background: rgba(255, 102, 102, 0.2);
+  border-color: rgba(255, 102, 102, 0.55);
+}
+
+.scenario__feedback {
+  margin-top: 0.85rem;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.quiz-question {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1.1rem;
+}
+
+.quiz-question fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.quiz-question legend {
+  font-weight: 700;
+  margin-bottom: 0.85rem;
+}
+
+.quiz-option {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  padding: 0.55rem 0;
+}
+
+.quiz__result {
+  margin-top: 1rem;
+}
+
+.footer {
+  padding: 0 1.5rem 3rem;
+  color: var(--muted);
+}
+
+@media (max-width: 720px) {
+  .hero {
+    padding-top: 4rem;
+  }
+
+  .section--dark,
+  .section--soft {
+    padding: 1.2rem;
+  }
+}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__content">
+      <p class="eyebrow">Secondary Economics Learning App</p>
+      <h1>Global Finance Explorer</h1>
+      <p class="hero__text">
+        Learn how money moves around the world, why exchange rates change, and how banks,
+        governments, and global organisations shape the financial system.
+      </p>
+      <div class="hero__actions">
+        <a class="button button--primary" href="#journey">Start Learning</a>
+        <a class="button button--ghost" href="#quiz">Take the Quiz</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section section--intro">
+      <div class="section__heading">
+        <p class="section__tag">What You'll Learn</p>
+        <h2>Big ideas made simpler</h2>
+      </div>
+      <div class="grid grid--3">
+        <article class="card">
+          <h3>Money Flow</h3>
+          <p>See how households, businesses, banks, and governments are connected.</p>
+        </article>
+        <article class="card">
+          <h3>Global Links</h3>
+          <p>Understand trade, exchange rates, and why countries depend on one another.</p>
+        </article>
+        <article class="card">
+          <h3>Real Decisions</h3>
+          <p>Test your understanding with scenarios and a quiz at the end.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="journey" class="section">
+      <div class="section__heading">
+        <p class="section__tag">Step 1</p>
+        <h2>Who are the main players?</h2>
+        <p>
+          The global financial system is a network of people and organisations that save, borrow,
+          lend, invest, and regulate money.
+        </p>
+      </div>
+      <div class="grid grid--4">
+        <article class="card card--accent">
+          <h3>Households</h3>
+          <p>Earn wages, spend money, save in banks, and borrow for homes or education.</p>
+        </article>
+        <article class="card card--accent">
+          <h3>Businesses</h3>
+          <p>Sell goods and services, pay workers, invest, and sometimes borrow to grow.</p>
+        </article>
+        <article class="card card--accent">
+          <h3>Banks</h3>
+          <p>Keep deposits safe, make loans, and help money move between people and firms.</p>
+        </article>
+        <article class="card card--accent">
+          <h3>Governments</h3>
+          <p>Collect taxes, spend on services, borrow through bonds, and make rules.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section--dark">
+      <div class="section__heading">
+        <p class="section__tag">Step 2</p>
+        <h2>Follow the money</h2>
+        <p>Tap each stage to see how money travels through the system.</p>
+      </div>
+      <div class="flowchart" id="flowchart">
+        <button class="flowchart__step is-active" data-flow="0">1. Income</button>
+        <button class="flowchart__step" data-flow="1">2. Saving</button>
+        <button class="flowchart__step" data-flow="2">3. Lending</button>
+        <button class="flowchart__step" data-flow="3">4. Investment</button>
+        <button class="flowchart__step" data-flow="4">5. Trade</button>
+      </div>
+      <article class="card card--panel" id="flow-panel">
+        <h3>Income</h3>
+        <p>
+          People earn income from jobs or businesses. This money can be spent, saved, taxed, or invested.
+        </p>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section__heading">
+        <p class="section__tag">Step 3</p>
+        <h2>National vs global finance</h2>
+        <p>Some money activities happen inside one country. Others connect the whole world.</p>
+      </div>
+      <div class="compare">
+        <article class="card">
+          <h3>Inside a country</h3>
+          <ul class="checklist">
+            <li>People deposit money in local banks</li>
+            <li>Governments collect taxes and spend on services</li>
+            <li>Central banks influence interest rates</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>Across countries</h3>
+          <ul class="checklist">
+            <li>Businesses buy and sell in global markets</li>
+            <li>Investors move money between countries</li>
+            <li>Currencies are exchanged every day</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__heading">
+        <p class="section__tag">Step 4</p>
+        <h2>Explore key terms</h2>
+        <p>Choose a term to reveal a quick explanation.</p>
+      </div>
+      <div class="glossary" id="glossary"></div>
+    </section>
+
+    <section class="section section--soft">
+      <div class="section__heading">
+        <p class="section__tag">Step 5</p>
+        <h2>Why exchange rates matter</h2>
+        <p>Use the slider to see what happens when a currency becomes stronger or weaker.</p>
+      </div>
+      <div class="simulator card">
+        <label for="rateRange">Currency strength</label>
+        <input id="rateRange" type="range" min="0" max="2" step="1" value="1" />
+        <div class="simulator__display">
+          <div>
+            <p class="simulator__label">Scenario</p>
+            <h3 id="rateTitle">Balanced currency</h3>
+          </div>
+          <p id="rateText">
+            Imports and exports are not strongly affected by exchange rate changes.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section__heading">
+        <p class="section__tag">Step 6</p>
+        <h2>Global organisations</h2>
+        <p>These groups try to support stability, development, and cooperation.</p>
+      </div>
+      <div class="grid grid--3">
+        <article class="card">
+          <h3>IMF</h3>
+          <p>The International Monetary Fund supports countries facing financial problems.</p>
+        </article>
+        <article class="card">
+          <h3>World Bank</h3>
+          <p>Helps fund long-term development projects such as infrastructure and education.</p>
+        </article>
+        <article class="card">
+          <h3>Central Banks</h3>
+          <p>Each country's central bank helps control inflation and support financial stability.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section--dark">
+      <div class="section__heading">
+        <p class="section__tag">Practice</p>
+        <h2>Scenario challenge</h2>
+        <p>Pick the best answer to each real-world style question.</p>
+      </div>
+      <div class="scenario-grid" id="scenario-grid"></div>
+    </section>
+
+    <section id="quiz" class="section">
+      <div class="section__heading">
+        <p class="section__tag">Final Check</p>
+        <h2>Quick quiz</h2>
+        <p>Answer five questions and see how much you remember.</p>
+      </div>
+      <form id="quiz-form" class="quiz"></form>
+      <div class="quiz__actions">
+        <button class="button button--primary" id="submit-quiz" type="button">Mark My Quiz</button>
+        <button class="button button--ghost" id="reset-quiz" type="button" style="color: var(--text); border-color: var(--border);">Reset</button>
+      </div>
+      <article class="card card--panel quiz__result" id="quiz-result" aria-live="polite">
+        <h3>Your result will appear here</h3>
+        <p>Try the quiz when you're ready.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Built to support secondary students learning economics, business, and global citizenship.</p>
+  </footer>
+
+  <script>
+const flowSteps = [
+  {
+    title: "Income",
+    text: "People and businesses earn money through work, sales, and services. This is the starting point for most financial activity."
+  },
+  {
+    title: "Saving",
+    text: "Some income is saved in banks or other accounts. Savings give banks funds that can later be lent to others."
+  },
+  {
+    title: "Lending",
+    text: "Banks lend money to households, businesses, and governments. Loans can help pay for homes, expansion, or public projects."
+  },
+  {
+    title: "Investment",
+    text: "Money can be invested in companies, bonds, or projects. Investment helps economies grow and can create future returns."
+  },
+  {
+    title: "Trade",
+    text: "When countries buy and sell goods and services, money crosses borders. This links national economies into one global system."
+  }
+];
+
+const glossaryTerms = [
+  {
+    term: "Exchange Rate",
+    meaning: "The price of one currency compared with another, such as how many euros one pound can buy."
+  },
+  {
+    term: "Interest Rate",
+    meaning: "The cost of borrowing money, or the reward for saving it."
+  },
+  {
+    term: "Inflation",
+    meaning: "A general increase in prices over time, which reduces how much money can buy."
+  },
+  {
+    term: "Central Bank",
+    meaning: "A national bank that manages monetary policy and supports financial stability."
+  },
+  {
+    term: "Investment",
+    meaning: "Using money now in the hope of gaining more value in the future."
+  },
+  {
+    term: "Bond",
+    meaning: "A way for governments or companies to borrow money from investors."
+  }
+];
+
+const rateScenarios = [
+  {
+    title: "Weaker currency",
+    text: "Exports may become cheaper for other countries to buy, but imports often become more expensive at home."
+  },
+  {
+    title: "Balanced currency",
+    text: "Imports and exports are not strongly affected by exchange rate changes."
+  },
+  {
+    title: "Stronger currency",
+    text: "Imports may become cheaper, but exports can be more expensive for customers in other countries."
+  }
+];
+
+const scenarios = [
+  {
+    prompt: "A country's currency suddenly becomes much weaker. Which outcome is most likely in the short term?",
+    options: [
+      "Imported goods become cheaper",
+      "Imported goods become more expensive",
+      "All loans disappear instantly"
+    ],
+    answer: 1,
+    explanation: "A weaker currency means the country must give up more of its own money to buy foreign goods."
+  },
+  {
+    prompt: "Why do banks matter in the financial system?",
+    options: [
+      "They connect savers and borrowers",
+      "They decide what every price should be",
+      "They replace governments"
+    ],
+    answer: 0,
+    explanation: "Banks collect deposits from savers and turn some of those funds into loans for others."
+  },
+  {
+    prompt: "Why might governments borrow money by selling bonds?",
+    options: [
+      "To fund spending on projects and services",
+      "To stop all trade with other countries",
+      "To remove taxes forever"
+    ],
+    answer: 0,
+    explanation: "Governments often borrow to pay for infrastructure, services, or to cover budget gaps."
+  }
+];
+
+const quizQuestions = [
+  {
+    question: "Which institution usually sets a country's main interest rate?",
+    options: ["Commercial banks", "Central bank", "Supermarkets"],
+    answer: 1
+  },
+  {
+    question: "What does an exchange rate compare?",
+    options: [
+      "The price of one currency against another",
+      "The wages of two workers",
+      "The value of two companies"
+    ],
+    answer: 0
+  },
+  {
+    question: "Why do businesses borrow money?",
+    options: [
+      "To make investment and growth possible",
+      "To avoid selling goods",
+      "To cancel all risk"
+    ],
+    answer: 0
+  },
+  {
+    question: "Which global organisation is known for helping countries facing financial crises?",
+    options: ["IMF", "Olympic Committee", "Postal Union"],
+    answer: 0
+  },
+  {
+    question: "If inflation rises quickly, what usually happens to purchasing power?",
+    options: [
+      "It increases sharply",
+      "It stays exactly the same",
+      "It falls"
+    ],
+    answer: 2
+  }
+];
+
+const flowButtons = document.querySelectorAll(".flowchart__step");
+const flowPanel = document.getElementById("flow-panel");
+const glossary = document.getElementById("glossary");
+const rateRange = document.getElementById("rateRange");
+const rateTitle = document.getElementById("rateTitle");
+const rateText = document.getElementById("rateText");
+const scenarioGrid = document.getElementById("scenario-grid");
+const quizForm = document.getElementById("quiz-form");
+const quizResult = document.getElementById("quiz-result");
+const submitQuizButton = document.getElementById("submit-quiz");
+const resetQuizButton = document.getElementById("reset-quiz");
+
+function updateFlowPanel(index) {
+  const step = flowSteps[index];
+  flowPanel.innerHTML = `
+    <h3>${step.title}</h3>
+    <p>${step.text}</p>
+  `;
+}
+
+flowButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const selectedIndex = Number(button.dataset.flow);
+    flowButtons.forEach((item) => item.classList.remove("is-active"));
+    button.classList.add("is-active");
+    updateFlowPanel(selectedIndex);
+  });
+});
+
+function renderGlossary() {
+  glossary.innerHTML = glossaryTerms
+    .map(
+      (item, index) => `
+        <article class="glossary__item">
+          <button class="glossary__button" type="button" data-glossary="${index}" aria-expanded="false">
+            <span>${item.term}</span>
+            <span>+</span>
+          </button>
+          <div class="glossary__content">
+            <p>${item.meaning}</p>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+
+  document.querySelectorAll(".glossary__button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const item = button.parentElement;
+      const isOpen = item.classList.contains("is-open");
+
+      document.querySelectorAll(".glossary__item").forEach((entry) => {
+        entry.classList.remove("is-open");
+        entry.querySelector(".glossary__button").setAttribute("aria-expanded", "false");
+        entry.querySelector(".glossary__button span:last-child").textContent = "+";
+      });
+
+      if (!isOpen) {
+        item.classList.add("is-open");
+        button.setAttribute("aria-expanded", "true");
+        button.querySelector("span:last-child").textContent = "−";
+      }
+    });
+  });
+}
+
+function updateRateScenario() {
+  const scenario = rateScenarios[Number(rateRange.value)];
+  rateTitle.textContent = scenario.title;
+  rateText.textContent = scenario.text;
+}
+
+rateRange.addEventListener("input", updateRateScenario);
+
+function renderScenarios() {
+  scenarioGrid.innerHTML = scenarios
+    .map(
+      (scenario, scenarioIndex) => `
+        <article class="scenario">
+          <h3>Scenario ${scenarioIndex + 1}</h3>
+          <p>${scenario.prompt}</p>
+          <div class="scenario__options">
+            ${scenario.options
+              .map(
+                (option, optionIndex) => `
+                  <button
+                    class="choice"
+                    type="button"
+                    data-scenario="${scenarioIndex}"
+                    data-option="${optionIndex}"
+                  >
+                    ${option}
+                  </button>
+                `
+              )
+              .join("")}
+          </div>
+          <p class="scenario__feedback" id="scenario-feedback-${scenarioIndex}">Choose an answer.</p>
+        </article>
+      `
+    )
+    .join("");
+
+  document.querySelectorAll(".choice").forEach((button) => {
+    button.addEventListener("click", () => {
+      const scenarioIndex = Number(button.dataset.scenario);
+      const optionIndex = Number(button.dataset.option);
+      const scenario = scenarios[scenarioIndex];
+      const buttons = document.querySelectorAll(`[data-scenario="${scenarioIndex}"]`);
+      const feedback = document.getElementById(`scenario-feedback-${scenarioIndex}`);
+
+      buttons.forEach((item) => {
+        item.disabled = true;
+        item.classList.remove("is-correct", "is-wrong");
+      });
+
+      buttons[scenario.answer].classList.add("is-correct");
+
+      if (optionIndex !== scenario.answer) {
+        button.classList.add("is-wrong");
+      }
+
+      feedback.textContent = scenario.explanation;
+    });
+  });
+}
+
+function renderQuiz() {
+  quizForm.innerHTML = quizQuestions
+    .map(
+      (item, questionIndex) => `
+        <article class="quiz-question">
+          <fieldset>
+            <legend>${questionIndex + 1}. ${item.question}</legend>
+            ${item.options
+              .map(
+                (option, optionIndex) => `
+                  <label class="quiz-option">
+                    <input
+                      type="radio"
+                      name="question-${questionIndex}"
+                      value="${optionIndex}"
+                    />
+                    <span>${option}</span>
+                  </label>
+                `
+              )
+              .join("")}
+          </fieldset>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function markQuiz() {
+  let score = 0;
+
+  quizQuestions.forEach((question, index) => {
+    const selected = quizForm.querySelector(`input[name="question-${index}"]:checked`);
+    if (selected && Number(selected.value) === question.answer) {
+      score += 1;
+    }
+  });
+
+  const percentage = Math.round((score / quizQuestions.length) * 100);
+  let message = "Good start. Review the sections above and try again.";
+
+  if (percentage === 100) {
+    message = "Excellent work. You've built a strong understanding of the global financial system.";
+  } else if (percentage >= 80) {
+    message = "Great job. You understand most of the key ideas.";
+  } else if (percentage >= 60) {
+    message = "Nice progress. You're getting the main ideas, but a quick review would help.";
+  }
+
+  quizResult.innerHTML = `
+    <h3>You scored ${score} out of ${quizQuestions.length}</h3>
+    <p>${message}</p>
+  `;
+}
+
+function resetQuiz() {
+  quizForm.reset();
+  quizResult.innerHTML = `
+    <h3>Your result will appear here</h3>
+    <p>Try the quiz when you're ready.</p>
+  `;
+}
+
+submitQuizButton.addEventListener("click", markQuiz);
+resetQuizButton.addEventListener("click", resetQuiz);
+
+renderGlossary();
+renderScenarios();
+renderQuiz();
+updateRateScenario();
+  </script>
+</body>
+</html>
